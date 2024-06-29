@@ -34,6 +34,11 @@ check_error
 sudo iptables -P INPUT DROP
 check_error
 
+# Create the directory for iptables rules if it doesn't exist
+echo "Ensuring /etc/iptables directory exists..."
+sudo mkdir -p /etc/iptables
+check_error
+
 # Save the iptables rules
 echo "Saving iptables rules..."
 sudo iptables-save | sudo tee /etc/iptables/rules.v4
