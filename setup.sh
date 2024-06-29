@@ -116,7 +116,7 @@ fi
 # Create Docker volume for model storage if not already created
 if ! docker volume inspect model_volume &> /dev/null; then
   echo "Creating Docker volume for model storage..."
-  docker volume create model_volume
+  sudo docker volume create model_volume
   check_error
 else
   echo "Docker volume already created."
@@ -124,7 +124,7 @@ fi
 
 # Build and start Docker containers using Docker Compose
 echo "Building and starting Docker containers using Docker Compose..."
-docker-compose up --build -d
+sudo docker-compose up --build -d
 check_error
 
 echo "Setup completed successfully!"
