@@ -94,11 +94,28 @@ else
   echo "Docker Compose already installed."
 fi
 
-# Install Certbot for Let's Encrypt if not already installed
-if ! command -v certbot &> /dev/null; then
-  echo "Installing Certbot for Let's Encrypt..."
+# Install Snap and Certbot if not already installed
+if ! command -v snap &> /dev/null; then
+  echo "Installing Snap..."
   sudo yum install -y epel-release
-  sudo yum install -y certbot python3-certbot-nginx
+  sudo yum install -y snapd
+  check_error
+  sudo systemctl enable --now snapd.socket
+  sudo ln -s /var/lib/snapd/snap /snap
+  check_error
+else
+  echo "Snap already installed."
+fi
+
+# Install Certbot using Snap if not already installed
+if ! command -v certbot &> /dev/null; then
+  echo "Installing Certbot using Snap..."
+  sudo snap install core
+  sudo snap refresh core
+  sudo snap install --classic certbot
+  sudo ln -s /snap/bin/certbot /usr/bin/certbot
+  sudo snap set certbot trust-plugin-with-root=ok
+  sudo snap install certbot-dns-nginx
   check_error
 else
   echo "Certbot already installed."
