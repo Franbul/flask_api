@@ -45,9 +45,9 @@ sudo iptables-save | sudo tee /etc/iptables/rules.v4
 check_error
 
 # Update package database
-echo "Updating package database..."
-sudo yum update -y
-check_error
+#echo "Updating package database..."
+#sudo yum update -y
+#check_error
 
 # Install required packages for Docker if not already installed
 echo "Installing required packages for Docker..."
