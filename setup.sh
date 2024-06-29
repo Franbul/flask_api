@@ -125,7 +125,7 @@ fi
 
 # Build and start Docker containers using Docker Compose
 echo "Building and starting Docker containers using Docker Compose..."
-sudo docker-compose up --build -d
+sudo /usr/local/bin/docker-compose up --build -d
 check_error
 
 echo "Setup completed successfully!"
