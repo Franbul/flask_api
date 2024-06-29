@@ -94,41 +94,24 @@ else
   echo "Docker Compose already installed."
 fi
 
-# Install Snap and Certbot if not already installed
-if ! command -v snap &> /dev/null; then
-  echo "Installing Snap..."
-  sudo yum install -y epel-release
-  sudo yum install -y snapd
-  check_error
-  sudo systemctl enable --now snapd.socket
-  sudo ln -s /var/lib/snapd/snap /snap
-  check_error
-else
-  echo "Snap already installed."
-fi
-
-# Install Certbot using Snap if not already installed
-if ! command -v certbot &> /dev/null; then
-  echo "Installing Certbot using Snap..."
-  sudo snap install core
-  sudo snap refresh core
-  sudo snap install --classic certbot
-  sudo ln -s /snap/bin/certbot /usr/bin/certbot
-  sudo snap set certbot trust-plugin-with-root=ok
-  sudo snap install certbot-dns-nginx
-  check_error
-else
-  echo "Certbot already installed."
-fi
+# Install Certbot and its Nginx plugin from EPEL repository
+#if ! command -v certbot &> /dev/null; then
+#  echo "Installing Certbot and its Nginx plugin from EPEL repository..."
+#  sudo yum install -y epel-release
+#  sudo yum install -y certbot python2-certbot-nginx
+#  check_error
+#else
+#  echo "Certbot already installed."
+#fi
 
 # Obtain SSL certificates using Certbot if not already obtained
-if [ ! -d "/etc/letsencrypt/live/yourdomain.com" ]; then
-  echo "Obtaining SSL certificates using Certbot..."
-  sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
-  check_error
-else
-  echo "SSL certificates already obtained."
-fi
+#if [ ! -d "/etc/letsencrypt/live/yourdomain.com" ]; then
+#  echo "Obtaining SSL certificates using Certbot..."
+#  sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+#  check_error
+#else
+#  echo "SSL certificates already obtained."
+#fi
 
 # Create Docker volume for model storage if not already created
 if ! docker volume inspect model_volume &> /dev/null; then
