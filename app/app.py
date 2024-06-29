@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Load the model
 #model = joblib.load('/app/models/your_model.pkl')
 
-@app.route('/test', methods=['POST'])
+@app.route('/test', methods=['POST', 'GET'])
 def test():
     return jsonify({'API': "OK"})
 
