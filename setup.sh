@@ -94,6 +94,7 @@ else
   echo "Docker Compose already installed."
 fi
 
+
 # Install Certbot and its Nginx plugin from EPEL repository
 #if ! command -v certbot &> /dev/null; then
 #  echo "Installing Certbot and its Nginx plugin from EPEL repository..."
