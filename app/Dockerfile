@@ -18,4 +18,4 @@ RUN pip install uwsgi uwsgitop  # Ensure uwsgi and uwsgitop are installed
 
 COPY . .
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD ["uwsgi", "--ini", "uwsgi.ini","--protocol","http"]
