@@ -15,8 +15,6 @@ services:
       - "443:443"
     depends_on:
       - flask
-    volumes:
-      - /etc/ssl:/etc/ssl:ro
       
 volumes:
   model_volume:

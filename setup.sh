@@ -94,25 +94,33 @@ else
   echo "Docker Compose already installed."
 fi
 
+# Create directories for SSL certificates if they don't exist
+mkdir -p nginx/certs
+sudo mkdir -p /etc/ssl/private
+sudo mkdir -p /etc/ssl/certs
 
-# Install Certbot and its Nginx plugin from EPEL repository
-#if ! command -v certbot &> /dev/null; then
-#  echo "Installing Certbot and its Nginx plugin from EPEL repository..."
-#  sudo yum install -y epel-release
-#  sudo yum install -y certbot python2-certbot-nginx
-#  check_error
-#else
-#  echo "Certbot already installed."
-#fi
+# Check if certificates already exist
+if [ -f nginx/certs/nginx-selfsigned.crt ] && [ -f nginx/certs/nginx-selfsigned.key ]; then
+  echo "SSL certificates already exist. Skipping generation."
+else
+  # Generate self-signed SSL certificates
+  echo "Generating self-signed SSL certificates..."
+  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/certs/nginx-selfsigned.key -out nginx/certs/nginx-selfsigned.crt <<EOF
+US
+State
+City
+Organization
+Unit
+localhost
+email@example.com
+EOF
 
-# Obtain SSL certificates using Certbot if not already obtained
-#if [ ! -d "/etc/letsencrypt/live/yourdomain.com" ]; then
-#  echo "Obtaining SSL certificates using Certbot..."
-#  sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
-#  check_error
-#else
-#  echo "SSL certificates already obtained."
-#fi
+  # Copy certificates to /etc/ssl
+  echo "Copying certificates to /etc/ssl..."
+  cp nginx/certs/nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+  cp nginx/certs/nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+
+fi
 
 # Create Docker volume for model storage if not already created
 if ! docker volume inspect model_volume &> /dev/null; then
